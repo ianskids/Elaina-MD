@@ -1,5 +1,5 @@
 ### INFO 
-Script WhatsApp Bot Multi Device
+Stil in devsec 🗿
 
 Original : [`DikaArdnt/Hisoka-Morou`](https://github.com/DikaArdnt/Hisoka-Morou)
 
