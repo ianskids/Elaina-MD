@@ -2101,15 +2101,55 @@ let message = await prepareWAMessageMedia({ image : { url: anu.thumbnail } }, { 
 //═══════════[ Download Menu ]═══════════\\
 
                //kalo kalian suka ori hapus aja ini
-            case 'ytmp4': case 'ytvideo': {
+               case 'ytmp4': case 'ytvideo': {
                 let { ytv } = require('./lib/y2mate')
-                if (!text) throw `Example : ${prefix + command} https://youtu.be/Cv1Sc4sep9k 360p`
                 let quality = args[1] ? args[1] : '360p'
                 let media = await ytv(text, quality)
-                if (media.filesize >= 999999) return reply('Video size is too big '+util.format(media))
-                elaina.sendMessage(m.chat, { video: { url: media.dl_link }, mimetype: 'video/mp4', fileName: `${media.title}.mp4`, caption: `⭔ Title : ${media.title}\n⭔ File Size : ${media.filesizeF}\n⭔ Url : ${isUrl(text)}\n⭔ Ext : MP3\n⭔ Resololution : ${args[1] || '360p'}` }, { quoted: m })
+               if (!text) throw `Contoh : ${prefix + command} https://youtu.be/Cv1Sc4sep9k`                                                                                    
+         jembud = `⭔ Title : ${media.title}
+⭔ Ext : MP4`           
+let message = await prepareWAMessageMedia({ image: await getBuffer(`https://uploader.caliph.my.id/file/kBXJ9OOD0M.jpg`)}, { upload: elaina.waUploadToServer })
+    template = generateWAMessageFromContent(m.chat, proto.Message.fromObject({
+           templateMessage: {
+                hydratedTemplate: {
+                     imageMessage: message.imageMessage,
+                          hydratedContentText: `*• Pilih Opsi Resolusi*`,
+                            hydratedFooterText: jembud,
+                             hydratedButtons: [{                                
+                              urlButton: {
+                                    displayText: 'Url',
+                                    url: `${isUrl(text)}`
+                                }
+                            }, {
+                                quickReplyButton: {
+                                    displayText: '240px',
+                                    id: `${prefix}ytress ${isUrl(text)} 240p`
+                                    }
+                            }, {
+                                quickReplyButton: {
+                                    displayText: '360px',
+                                    id: `${prefix}ytress ${isUrl(text)} 360p`
+                                    }
+                            }, {
+                                 quickReplyButton: {
+                                    displayText: '720px',
+                                    id: `${prefix}ytress ${isUrl(text)} 720p`
+                                    }
+                            }]
+                        }
+                    }
+                }), { userJid: m.chat, quoted: m })
+                  elaina.relayMessage(m.chat, template.message, { messageId: template.key.id })
             }
-            break       
+            break
+            case 'ytress':{
+                let { ytv } = require('./lib/y2mate')
+                let quality = args[1] ? args[1] : '360p'
+                let media = await ytv(text, quality)
+                if (media.filesize >= 999999) return replay('Video size is too big '+util.format(media))
+                elaina.sendMessage(m.chat, { video: { url: media.dl_link }, mimetype: 'video/mp4', fileName: `${media.title}.mp4`, caption: `Result` }, { quoted: m })
+            }
+            break        
             case 'ytmp3': case 'ytaudio': {
                 let { yta } = require('./lib/y2mate')
                 if (!text) throw `Contoh : ${prefix + command} https://youtu.be/Cv1Sc4sep9k 320kbps`
